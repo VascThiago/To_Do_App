@@ -21,9 +21,10 @@ export const search = () => {
 
 //limpar formulario
 export const clear = () => {
-    return {
+    return [{
         type: 'TODO_CLEAR'
-    }
+    },
+    search()]
 }
 
 //usando thunk e multi e disparando adicionar e pesquisar juntos porém ordenados

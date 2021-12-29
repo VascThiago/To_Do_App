@@ -1,9 +1,7 @@
 const webpack = require('webpack')
-// const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const ExtractTextPlugin = require('mini-css-extract-plugin')
- 
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 module.exports = {
-    mode: 'development', // 'production' // | 'development' | 'none'
     entry: './src/index.jsx',
     output: {
         path: __dirname + '/public',
@@ -11,7 +9,7 @@ module.exports = {
     },
     devServer: {
         port: 8080,
-        static: './public',
+        contentBase: './public',
     },
     resolve: {
         extensions: ['', '.js', '.jsx'],
@@ -19,36 +17,24 @@ module.exports = {
             modules: __dirname + '/node_modules'
         }
     },
-    plugins: [
-        new ExtractTextPlugin({
-            filename: 'app.css',
-        })
+    plugins: [ 
+        new ExtractTextPlugin('app.css')
     ],
     module: {
-        rules: [
-        {
+        loaders: [{
             test: /.js[x]?$/,
-            use: [{
-                loader: 'babel-loader',
-                /* options: {
-                    presets: ['es2015', 'react'],
-                    plugins: ['transform-object-rest-spread']
-                } */
-            }],
+            loader: 'babel-loader',
             exclude: /node_modules/,
- 
+            query: {
+                presets: ['es2015', 'react'],
+                plugins: ['transform-object-rest-spread']
+            }
         }, {
-            test: /\.css$/i,
-            use: [ExtractTextPlugin.loader, "css-loader"],
-            /* use: [
-                {
-                    loader: ExtractTextPlugin.loader
-                },
-                "css-loader"
-            ], */
+            test: /\.css$/,
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
         }, {
             test: /\.woff|.woff2|.ttf|.eot|.svg*.*$/,
-            use: 'file-loader'
+            loader: 'file'
         }]
     }
 }

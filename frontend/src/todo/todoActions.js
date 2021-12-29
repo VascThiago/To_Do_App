@@ -10,12 +10,12 @@ export const changeDescription = (event) => ({
 })
 
 //pesquisar e atualizar
-export const search = (description) => {
-    const search = description ? `&description__regex=/${description}/` : ''
-    const request = axios.get(`${URL}?sort=-createdAt${search}`)
-    return {
-        type: 'TODO_SEARCHED',
-        payload: request
+export const search = () => {
+    return (dispatch, getState) => {
+        const description = getState().todo.description
+        const search = description ? `&description__regex=/${description}/` : ''
+        const request = axios.get(`${URL}?sort=-createdAt${search}`)
+            .then(resp => dispatch({ type: 'TODO_SEARCHED', payload: resp.data }))
     }
 }
 
